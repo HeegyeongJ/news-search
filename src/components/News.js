@@ -8,7 +8,9 @@ const News = ({ searchValue }) => {
     useEffect(() => {
         if (searchValue) {
             getNewsList(searchValue);
-        } 
+        } else {
+            
+        }
         setIsLoading(false)
         console.log(news);
     }, [searchValue])
@@ -31,7 +33,7 @@ const News = ({ searchValue }) => {
                     <h2 key={index}>{article.title}</h2>
                     <p>{article.description}</p>
                 </div>
-            )) : <p>Loading</p>}
+            )) : <p></p>}
         </div>
     );
 };
