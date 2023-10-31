@@ -1,27 +1,37 @@
 import React, { useEffect, useState } from 'react';
 
-const News = () => {
+const News = ({ searchValue }) => {
     const [news, setNews] = useState([]);
-    useEffect(() => {
-        getNewsList();
-        console.log(news);
-    }, [])
+    const [isLoading, setIsLoading] = useState(false)
 
-    const getNewsList = async () => {
+
+    useEffect(() => {
+        if (searchValue) {
+            getNewsList(searchValue);
+        } 
+        setIsLoading(false)
+        console.log(news);
+    }, [searchValue])
+
+    const getNewsList = async (searchValue) => {
         try {
-            const response = await fetch('https://newsapi.org/v2/top-headlines?country=us&category=business&apiKey=698fb8601daf4b75b37ddc98ccd12a8c');
+            const response = await fetch(`https://newsapi.org/v2/everything?q=${searchValue}&apiKey=698fb8601daf4b75b37ddc98ccd12a8c`);
             const data = await response.json();
             setNews(data.articles);
-        } catch (err) {
-            console.error(err.message);
+            setIsLoading(true)
+        } catch (error) {
+            console.error(error.message);
         }
     }
 
     return (
         <div>
-            {news.map(item => (
-                <div key={item.title}>{item.title}</div>
-            ))}
+            {isLoading ? news.map((article, index) => (
+                <div>
+                    <h2 key={index}>{article.title}</h2>
+                    <p>{article.description}</p>
+                </div>
+            )) : <p>Loading</p>}
         </div>
     );
 };
