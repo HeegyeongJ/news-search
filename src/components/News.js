@@ -1,18 +1,23 @@
+import { useEffect, useState } from 'react';
 import { useSelector } from 'react-redux';
 
 const News = () => {
-    const news = useSelector(state => state.news)
-    const articles = news.articles
+    const news = useSelector(state => state.news.articles)
+    const status = useSelector(state => state.status)
 
-
+    
+    if (status === 'failed' || (news && news.length) === 0) {
+        return <div>empty</div>
+    }
+   
     return (
         <div>
-            {articles ? articles.map((article, index) => (
-                <div>
-                    <h2 key={index}>{article.title}</h2>
+            {news && news.map((article, index) => (
+                <div key={index}>
+                    <h2>{article.title}</h2>
                     <p>{article.description}</p>
                 </div>
-            )) : <p></p>}
+            ))}
         </div>
     );
 };

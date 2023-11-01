@@ -1,9 +1,6 @@
 import { configureStore, createSlice } from '@reduxjs/toolkit';
 
 
-
-
-
 export const fetchNewsData = (searchValue) => {
     return async (dispatch) => {
         const fetchData = async () => {
@@ -16,9 +13,11 @@ export const fetchNewsData = (searchValue) => {
         }
         try {
             const newsData = await fetchData();
+            console.log(newsData)
             dispatch(newsActions.fetchNews(newsData));
         } catch (error) {
-            console.error('errrr')
+            dispatch(newsActions.fetchError());
+            console.error(error.message)
         }
     }
 }
@@ -28,10 +27,15 @@ const newsSlice = createSlice({
     name: 'news',
     initialState: {
         news: [],
+        status: 'success'
     },
     reducers: {
         fetchNews(state, action) {
-            state.news = action.payload
+            state.status = 'success'
+            state.news = action.payload;
+        },
+        fetchError(state, action) {
+            state.status = 'failed'
         }
     }
 })
