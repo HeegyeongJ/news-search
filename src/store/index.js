@@ -1,4 +1,8 @@
-import { createStore } from 'redux'
+import { configureStore, createSlice } from '@reduxjs/toolkit';
+
+
+
+
 
 export const fetchNewsData = (searchValue) => {
     return async (dispatch) => {
@@ -12,23 +16,30 @@ export const fetchNewsData = (searchValue) => {
         }
         try {
             const newsData = await fetchData();
-            dispatch({ type: 'fetch', data: newsData });
-        } catch {
-
+            dispatch(newsActions.fetchNews(newsData));
+        } catch (error) {
+            console.error('errrr')
         }
     }
 }
 
-const fetchReducer = (state = { news: [] }, action) => {
-    if (action.type === 'fetch') {
-        return {
-            ...state,
-            news: action.data
+
+const newsSlice = createSlice({
+    name: 'news',
+    initialState: {
+        news: [],
+    },
+    reducers: {
+        fetchNews(state, action) {
+            state.news = action.payload
         }
     }
-    return state;
-}
+})
 
-const store = createStore(fetchReducer);
+export const newsActions = newsSlice.actions
+
+const store = configureStore({
+    reducer: newsSlice.reducer
+});
 
 export default store;

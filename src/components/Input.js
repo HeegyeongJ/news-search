@@ -1,9 +1,13 @@
 import React, { useState } from 'react';
+import { useDispatch } from 'react-redux';
+import { fetchNewsData } from './../store/index';
 
-const Input = ({ getSearchValue }) => {
-    const [inputValue, setInputValue] = useState('')
+const Input = () => {
+    const [inputValue, setInputValue] = useState('');
+    const dispatch = useDispatch();
+
     const searchValueSubmit = () => {
-        getSearchValue(inputValue);
+        dispatch(fetchNewsData(inputValue));
     }
 
     const inputChangeHandler = (e) => {
